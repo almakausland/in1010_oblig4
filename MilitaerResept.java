@@ -1,4 +1,4 @@
-class MillitaerResept extends Hvit {
+class MillitaerResept extends HvitResept {
     public MillitaerResept(Legemiddel legemiddel, Lege utskrivendeLege, Pasient pasient, int reit) {
         super(legemiddel, utskrivendeLege, pasient, reit);
     }

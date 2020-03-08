@@ -1,5 +1,5 @@
-class Hvit extends Resept {
-    Hvit(Legemiddel legemiddel, Lege utskrivendeLege, Pasient pasient, int reit) {
+class HvitResept extends Resept {
+    HvitResept(Legemiddel legemiddel, Lege utskrivendeLege, Pasient pasient, int reit) {
         super(legemiddel, utskrivendeLege, pasient, reit);
     }
 

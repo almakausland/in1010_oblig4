@@ -1,10 +1,11 @@
 class Lege implements Comparable<Lege> {
     
     private String legeNavn;
-    private Lenkeliste<Resept> utskrevedeResepter;
+    protected Lenkeliste<Resept> utskrevedeResepter;
     
     public Lege(String legeNavn) {
         this.legeNavn = legeNavn;
+        utskrevedeResepter = new Lenkeliste<Resept>();
     }
 
     public String hentLegeNavn() {
@@ -13,6 +14,46 @@ class Lege implements Comparable<Lege> {
 
     public Lenkeliste<Resept> hentUtskrevedeResepter() {
         return utskrevedeResepter;
+    }
+
+    public HvitResept skrivHvitResept(Legemiddel legemiddel, Pasient pasient, int reit) throws UlovligUtskrift {
+        if (legemiddel instanceof Narkotisk) {
+            throw new UlovligUtskrift(this, legemiddel);
+        } else {
+            HvitResept hvitResept = new HvitResept(legemiddel, this, pasient, reit);
+            utskrevedeResepter.leggTil(hvitResept);
+            return hvitResept;
+        }
+    }
+
+    public MillitaerResept skrivMilitaerResept(Legemiddel legemiddel, Pasient pasient, int reit) throws UlovligUtskrift {
+        if (legemiddel instanceof Narkotisk) {
+            throw new UlovligUtskrift(this, legemiddel);
+        } else {
+            MillitaerResept millitaerResept = new MillitaerResept(legemiddel, this, pasient, reit);
+            utskrevedeResepter.leggTil(millitaerResept);
+            return millitaerResept;
+        }
+    }
+
+    public PResept skrivPResept(Legemiddel legemiddel, Pasient pasient) throws UlovligUtskrift {
+        if (legemiddel instanceof Narkotisk) {
+            throw new UlovligUtskrift(this, legemiddel);
+        } else {
+            PResept pResept = new PResept(legemiddel, this, pasient);
+            utskrevedeResepter.leggTil(pResept);
+            return pResept;
+        }
+    }
+
+    public BlaaResept skrivBlaaResept(Legemiddel legemiddel, Pasient pasient, int reit) throws UlovligUtskrift {
+        if (legemiddel instanceof Narkotisk) {
+            throw new UlovligUtskrift(this, legemiddel);
+        } else {
+            BlaaResept blaaResept = new BlaaResept(legemiddel, this, pasient, reit);
+            utskrevedeResepter.leggTil(blaaResept);
+            return blaaResept;
+        }
     }
 
     @Override

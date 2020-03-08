@@ -1,4 +1,4 @@
-class PResept extends Hvit {
+class PResept extends HvitResept {
     private static final int PRESEPT_REIT = 3;
     public PResept(Legemiddel legemiddel, Lege utskrivendeLege, Pasient pasient) {
         super(legemiddel, utskrivendeLege, pasient, PRESEPT_REIT);

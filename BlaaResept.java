@@ -1,5 +1,5 @@
-class Blaa extends Resept {
-    Blaa(Legemiddel legemiddel, Lege utskrivendeLege, Pasient pasient, int reit) {
+class BlaaResept extends Resept {
+    BlaaResept(Legemiddel legemiddel, Lege utskrivendeLege, Pasient pasient, int reit) {
         super(legemiddel, utskrivendeLege, pasient, reit);
 
     }
