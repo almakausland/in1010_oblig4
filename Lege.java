@@ -1,4 +1,4 @@
-class Lege {
+class Lege implements Comparable<Lege> {
     
     String legeNavn;
     
@@ -8,6 +8,11 @@ class Lege {
 
     public String hentLegeNavn() {
         return legeNavn;
+    }
+
+    @Override
+    public int compareTo(Lege annen) {
+        return legeNavn.compareTo(annen.legeNavn);
     }
 
     @Override
