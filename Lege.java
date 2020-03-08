@@ -1,7 +1,7 @@
 class Lege implements Comparable<Lege> {
     
-    String legeNavn;
-    Lenkeliste<Resept> utskrevedeResepter;
+    private String legeNavn;
+    private Lenkeliste<Resept> utskrevedeResepter;
     
     public Lege(String legeNavn) {
         this.legeNavn = legeNavn;
