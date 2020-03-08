@@ -5,8 +5,8 @@ class Vanedannende extends Legemiddel {
     public Vanedannende(String navn, double pris, double virkestoff, int styrke) {
         super(navn, pris, virkestoff);
         this.styrke = styrke;
-        id = Vanlig.antall;
-        Vanedannende.antall++;
+        id = antall;
+        antall++;
     }
 
     protected int hentVanedannendeStyrke() {
