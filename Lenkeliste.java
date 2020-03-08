@@ -40,10 +40,14 @@ class Lenkeliste<T> implements Liste<T> {
     public void leggTil(int pos , T x) {
         Node nyttElement = new Node(x);
 
+        // Hvis angitt indeks er 0, endre start referanse
         if (pos == 0) {
             nyttElement.neste = start;
             start = nyttElement;
-        } else {
+        } 
+        
+        // ellers sett inn element på angitt posisjon og knyt elementet sammen med forrige og neste element i listen
+        else {
             Node forrigeElement = hentNode(pos - 1);
             nyttElement.neste = forrigeElement.neste;
             forrigeElement.neste = nyttElement;
@@ -87,6 +91,7 @@ class Lenkeliste<T> implements Liste<T> {
         return fjern(0);
     }
 
+    // Sjekk om gitt indeks er inennfor range til lenkelisten
     private boolean iRekkevidde(int indeks) {
         boolean forStart = indeks < 0;
         boolean etterSlutt = indeks > stoerrelse() - 1;
@@ -98,12 +103,14 @@ class Lenkeliste<T> implements Liste<T> {
         }
     }
 
+    // Kast unntak hvis angitt indeks ikke er i rekkevidde til lenkeliste
     private void sjekkIndeks(int indeks) {
         if (!iRekkevidde(indeks) || tomListe()) {
             throw new UgyldigListeIndeks(indeks);
         }
     }
 
+    // Sjekk om listen er tom
     private boolean tomListe() {
         if (stoerrelse() == 0) {
             return true;
@@ -112,6 +119,7 @@ class Lenkeliste<T> implements Liste<T> {
         }
     }
  
+    // For implementering av Iterable
     public Iterator<T> iterator() {
         return new LenkelisteIterator<T>(this);
     }

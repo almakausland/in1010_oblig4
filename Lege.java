@@ -16,6 +16,7 @@ class Lege implements Comparable<Lege> {
         return utskrevedeResepter;
     }
 
+    // Kast unntak hvis resepted som forsøkes skrives ut er Narkotisk, ellers legg til resept i liste hos lege og hos pasient
     public HvitResept skrivHvitResept(Legemiddel legemiddel, Pasient pasient, int reit) throws UlovligUtskrift {
         if (legemiddel instanceof Narkotisk) {
             throw new UlovligUtskrift(this, legemiddel);
@@ -27,6 +28,7 @@ class Lege implements Comparable<Lege> {
         }
     }
 
+    // Kast unntak hvis resepted som forsøkes skrives ut er Narkotisk, ellers legg til resept i liste hos lege og hos pasient
     public MillitaerResept skrivMilitaerResept(Legemiddel legemiddel, Pasient pasient, int reit) throws UlovligUtskrift {
         if (legemiddel instanceof Narkotisk) {
             throw new UlovligUtskrift(this, legemiddel);
@@ -38,6 +40,7 @@ class Lege implements Comparable<Lege> {
         }
     }
 
+    // Kast unntak hvis resepted som forsøkes skrives ut er Narkotisk, ellers legg til resept i liste hos lege og hos pasient
     public PResept skrivPResept(Legemiddel legemiddel, Pasient pasient) throws UlovligUtskrift {
         if (legemiddel instanceof Narkotisk) {
             throw new UlovligUtskrift(this, legemiddel);
@@ -49,6 +52,7 @@ class Lege implements Comparable<Lege> {
         }
     }
 
+    // Kast unntak hvis resepted som forsøkes skrives ut er Narkotisk, ellers legg til resept i liste hos lege og hos pasient
     public BlaaResept skrivBlaaResept(Legemiddel legemiddel, Pasient pasient, int reit) throws UlovligUtskrift {
         if (legemiddel instanceof Narkotisk) {
             throw new UlovligUtskrift(this, legemiddel);
@@ -60,6 +64,7 @@ class Lege implements Comparable<Lege> {
         }
     }
 
+    // Sammenligne denne legens navn med navnet til en annen lege
     @Override
     public int compareTo(Lege annen) {
         return legeNavn.compareTo(annen.legeNavn);

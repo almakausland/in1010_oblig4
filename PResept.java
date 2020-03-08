@@ -9,6 +9,7 @@ class PResept extends HvitResept {
         final double RABATT_STATISK = 108.0;
         double utsalgsPris = legemiddel.hentPris();
 
+        // Utsalgspris kan ikke være negativ
         if (utsalgsPris >= RABATT_STATISK) {
             return utsalgsPris - RABATT_STATISK;
         } else {
