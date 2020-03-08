@@ -1,6 +1,7 @@
 class Lege implements Comparable<Lege> {
     
     String legeNavn;
+    Lenkeliste<Resept> utskrevedeResepter;
     
     public Lege(String legeNavn) {
         this.legeNavn = legeNavn;
@@ -8,6 +9,10 @@ class Lege implements Comparable<Lege> {
 
     public String hentLegeNavn() {
         return legeNavn;
+    }
+
+    public Lenkeliste<Resept> hentUtskrevedeResepter() {
+        return utskrevedeResepter;
     }
 
     @Override
