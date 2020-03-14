@@ -13,6 +13,7 @@ abstract class Resept {
         this.reit = reit;
         reseptId = antall;
         antall++;
+        pasient.leggTilResept(this);
     }
 
     public int hentId() {
