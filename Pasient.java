@@ -30,4 +30,22 @@ class Pasient {
         return fodselsnummer;
     }
 
+    @Override
+    public String toString() {
+        String reseptTekst = "";
+        for (Resept resept: resepter){
+            reseptTekst += "\n\t" + resept.hentLegemiddel().hentNavn();
+        }
+
+        String tekstRep = String.format(
+                "Pasient Id: %s \n" +
+                "Navn: %s \n"+
+                "Fnr: %s \n"+
+                "Resepter: %s \n",
+                pasientId,
+                hentNavn(),
+                hentFnr(),
+                reseptTekst);
+        return tekstRep;
+    }
 }
