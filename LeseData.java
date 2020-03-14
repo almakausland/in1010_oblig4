@@ -6,6 +6,7 @@ import java.util.Scanner;
 import java.util.Arrays;
 
 class LeseData {
+	//oppretter en lenkelister for de forskjellige objektene
 	private Liste<Pasient> pasienter;
 	private Liste<Legemiddel> legemidler;
 	private Liste<Lege> leger;
@@ -33,6 +34,7 @@ class LeseData {
 		File file = new File(filepath);
 		Scanner scan = new Scanner(file);
 
+		//sjekker foerste type data og setter peker til neste linje
 		scan.next();
 		String typeData = scan.next();
 		scan.nextLine();
@@ -41,6 +43,11 @@ class LeseData {
 
 			switch(typeData) {
 				case "Pasienter":
+					//soerger for at vi har riktig mengde med argumenter
+					if (data.length != 2) {
+						break;
+					}
+
 					String pasientNavn = data[0];
 					String fodselsnummer = data[1];
 
@@ -48,8 +55,15 @@ class LeseData {
 					pasienter.leggTil(pasient);
 					break;
 				case "Legemidler":
-					String legemiddelNavn = data[0];
 					String type = data[1];
+					//Sjekker for ugyldig type og lengde i henhold til hvilken type
+					if (!(type.equals("narkotisk") || type.equals("vanedannende") || type.equals("vanlig"))
+						|| (type.equals("vanlig") && data.length != 4)
+						|| ((type.equals("narkotisk") || type.equals("vanedannende")) && data.length != 5)) {
+						break;
+					}
+
+					String legemiddelNavn = data[0];
 					double pris = Double.parseDouble(data[2]);
 					double virkestoff = Double.parseDouble(data[3]);
 					int styrke = 0;
@@ -71,6 +85,11 @@ class LeseData {
 					legemidler.leggTil(legemiddel);
 					break;
 				case "Leger":
+					//soerger for at vi har riktig mengde med argumenter
+					if (data.length != 2) {
+						break;
+					}
+
 					String legeNavn = data[0];
 					int kontrollId = Integer.parseInt(data[1]);
 
@@ -115,9 +134,8 @@ class LeseData {
 		LeseData data = new LeseData(path);
 
 		for (Pasient p : data.hentPasienter()) {
-			System.out.println(p.hentNavn() + " " + p.hentFnr());
+			System.out.printf("Navn: %s\nFnr: %s\n\n", p.hentNavn(), p.hentFnr());
 		}
-		System.out.println("");
 		
 		for (Legemiddel l : data.hentLegemidler()) {
 			System.out.println(l);
