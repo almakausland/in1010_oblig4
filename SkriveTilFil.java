@@ -33,6 +33,18 @@ class SkriveTilFil {
 
 	private void legemidlerTilFil(Liste<Legemiddel> legemidler, PrintWriter output) {
 		output.println("# Legemidler (navn,type,pris,virkestoff,[styrke]");
+		String legemiddel;
+
+		for (Legemiddel lm : legemidler) {
+			if (lm instanceof Vanlig) {
+				legemiddel = String.format("%s,vanlig,%f,%f", lm.hentNavn(), lm.hentPris(), lm.hentVirkestoff());
+			} else if (lm instanceof Narkotisk) {
+				legemiddel = String.format("%s,narkotisk,%f,%f,%d", lm.hentNavn(), lm.hentPris(), lm.hentVirkestoff(), lm.hentNarkotiskStyrke());
+			} else {
+				legemiddel = String.format("%s,vanedannende,%f,%f,%d", lm.hentNavn(), lm.hentPris(), lm.hentVirkestoff(), lm.hentVanedannendeStyrke());
+			}
+			output.println(legemiddel);
+		}
 	}
 
 	private void legerTilFil(Liste<Lege> leger, PrintWriter output) {
