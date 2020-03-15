@@ -23,6 +23,12 @@ class SkriveTilFil {
 
 	private void pasienterTilFil(Liste<Pasient> pasienter, PrintWriter output) {
 		output.println("# Pasienter (navn, fnr)");
+		String pasient;
+
+		for (Pasient p : pasienter) {
+			pasient = String.format("%s,%s", p.hentNavn(), p.hentFnr());
+			output.println(pasient);
+		}
 	}
 
 	private void legemidlerTilFil(Liste<Legemiddel> legemidler, PrintWriter output) {
