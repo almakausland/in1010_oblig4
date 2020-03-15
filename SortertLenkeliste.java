@@ -6,7 +6,7 @@ class SortertLenkeliste<T extends Comparable<T>> extends Lenkeliste<T> {
     public void leggTil(T x) {
         leggTil(indeksForStoerre(x), x);
     }
-    
+
     @Override
     public T fjern() {
         //T sisteElement = hentNode(stoerrelse() - 1).data;
@@ -28,7 +28,7 @@ class SortertLenkeliste<T extends Comparable<T>> extends Lenkeliste<T> {
         else {
             throw new UnsupportedOperationException();
         }
-        
+
     }
 
     private int indeksForStoerre(T x) {
