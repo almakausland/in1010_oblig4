@@ -1,10 +1,12 @@
 import java.util.Scanner;
 
 class Kommandolokke {
+    private Legesystem legesystem;
     private boolean visMeny;
     private Scanner terminalInput;
 
-    public Kommandolokke() {
+    public Kommandolokke(Legesystem legesystem) {
+        this.legesystem = legesystem;
         visMeny = true;
         terminalInput = new Scanner(System.in);
 
@@ -56,7 +58,7 @@ class Kommandolokke {
     }
 
     private void skrivOversikt() {
-        // Kall til E3
+        legesystem.print();
     }
 
     private void opprettElement() {
