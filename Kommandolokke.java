@@ -1,3 +1,4 @@
+import java.io.IOError;
 import java.util.Scanner;
 
 class Kommandolokke {
@@ -75,6 +76,14 @@ class Kommandolokke {
 
     private void skrivFil() {
         // Kall til E8
+        System.out.println("Vennligst oppgi path til fil: ");
+        String filnavn = terminalInput.next();
+
+        try {
+            SkriveTilFil(legesystem.pasientListe, legesystem.legeListe, legesystem.legemiddelListe, legesystem.reseptListe, filnavn);
+        } catch (IOError e) {
+            System.out.println("Ikke gyldig filnavn.");
+        }
     }
 
 }
