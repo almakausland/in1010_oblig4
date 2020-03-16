@@ -73,6 +73,45 @@ class Kommandolokke {
 
     private void skrivStatistikk() {
         // Kall til E6
+        int valg = statistikkValg();
+        tolkStatistikkValg(valg);
+    }
+
+    private int statistikkValg() {
+        System.out.println("Undermeny - Skriv statistikk");
+        System.out.println("0: Totalt antall utskrevne resepter på vanedannende legemidler");
+        System.out.println("1: Totalt antall utskrevne resepter på narkotiske legemidler");
+        System.out.println("2: Misbruk lege");
+        System.out.println("3: Misbruk pasient");
+        System.out.println("4: Avbryt");
+
+        // Hent input fra bruker
+        String valgStreng = terminalInput.next();
+
+        // Konverter input streng til heltall
+        try {
+            int valgTall = Integer.parseInt(valgStreng);
+            return valgTall;
+        } catch (NumberFormatException ikkeNummer) {
+            System.out.println("Feil format. Vennligst angi et tall.");
+            return statistikkValg();
+        }
+    }
+
+    private void tolkStatistikkValg(int valg) {
+        if (valg == 0) {
+            legesystem.statVane();
+        } else if (valg == 1) {
+            legesystem.statNark();
+        } else if (valg == 2) {
+            legesystem.statMisbrukLege();
+        } else if (valg == 3) {
+            legesystem.statMisbrukPasient();
+        } else if (valg == 4) {
+            visMeny = false;
+        } else if (valg < 0 || valg > 4) {
+            System.out.println("Vennligst velg et av tallene fra menyen. " + valg + " er ikke et gyldig tall.");
+        }
     }
 
     private void skrivFil() {
