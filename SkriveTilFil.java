@@ -65,6 +65,15 @@ class SkriveTilFil {
 
 	private void legerTilFil(Liste<Lege> leger, PrintWriter output) {
 		output.println("# Leger (navn,kontrollid / 0 hvis vanlig lege)");
+		String lege = null;
+		int kontrollId = 0;
+		for (Lege l : leger) {
+			if (l instanceof Spesialist) {
+				kontrollId = ((Spesialist) l).hentKontrollID();
+			}
+			lege = String.format("%s,%d", l.hentLegeNavn(), kontrollId);
+		}
+		output.println(lege);
 	}
 
 	private void resepterTilFil(Liste<Resept> resepter, PrintWriter output) {
