@@ -8,8 +8,9 @@ class SkriveTilFil {
 		Liste<Pasient> pasienter,
 		Liste<Legemiddel> legemidler,
 		Liste<Lege> leger,
-		Liste<Resept> resepter) throws IOException{
-		FileWriter fw = new FileWriter("output.txt", true);
+		Liste<Resept> resepter,
+		String filnavn) throws IOException{
+		FileWriter fw = new FileWriter(String.format("%s.txt", filnavn), true);
 		PrintWriter output = new PrintWriter(fw);
 
 		pasienterTilFil(pasienter, output);
