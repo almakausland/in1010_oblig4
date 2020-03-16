@@ -37,11 +37,11 @@ class SkriveTilFil {
 
 		for (Legemiddel lm : legemidler) {
 			if (lm instanceof Vanlig) {
-				legemiddel = String.format("%s,vanlig,%f,%f", lm.hentNavn(), lm.hentPris(), lm.hentVirkestoff());
+				legemiddel = String.format("%s,vanlig,%s,%s", lm.hentNavn(), String.valueOf(lm.hentPris()), String.valueOf(lm.hentVirkestoff()));
 			} else if (lm instanceof Narkotisk) {
-				legemiddel = String.format("%s,narkotisk,%f,%f,%d", lm.hentNavn(), lm.hentPris(), lm.hentVirkestoff(), lm.hentNarkotiskStyrke());
+				legemiddel = String.format("%s,narkotisk,%s,%s,%d", lm.hentNavn(), String.valueOf(lm.hentPris()), String.valueOf(lm.hentVirkestoff()), lm.hentNarkotiskStyrke());
 			} else {
-				legemiddel = String.format("%s,vanedannende,%f,%f,%d", lm.hentNavn(), lm.hentPris(), lm.hentVirkestoff(), lm.hentVanedannendeStyrke());
+				legemiddel = String.format("%s,vanedannende,%s,%s,%d", lm.hentNavn(), String.valueOf(lm.hentPris()), String.valueOf(lm.hentVirkestoff()), lm.hentVanedannendeStyrke());
 			}
 			output.println(legemiddel);
 		}
