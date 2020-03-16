@@ -59,6 +59,7 @@ class Kommandolokke {
     }
 
     private void skrivOversikt() {
+        // Kall på E3
         legesystem.print();
     }
 
