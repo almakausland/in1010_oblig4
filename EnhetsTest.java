@@ -1,4 +1,7 @@
 import java.io.FileNotFoundException;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 
 class EnhetsTest {
     private static int antallTester;
@@ -16,7 +19,15 @@ class EnhetsTest {
         //E2_kommandoLokke();
         //E3_skrivUt();
         //E6_statistikkTest();
-
+        /*
+        try {
+            E8_skriveTilFilTest();
+        } catch (FileNotFoundException e) {
+            System.out.printf("Feil: %s", e);
+        } catch (IOException e) {
+            System.out.printf("Feil: %s", e);
+        }
+        */
 
         System.out.println("Antall tester utført: " + antallTester);
         System.out.println("Antall tester bestått: " + antallOK);
@@ -191,6 +202,112 @@ class EnhetsTest {
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
+        antallOK++;
+    }
+
+    private static void E8_skriveTilFilTest() throws FileNotFoundException, IOException {
+        antallTester++;
+
+        // Leser av testdata fra fil inndata.txt og lager ny tekstfil
+        String path = System.getProperty("user.dir") + File.separator + "inndata.txt";
+        LeseData data = new LeseData(path);
+        SkriveTilFil stf = new SkriveTilFil(data.hentPasienter(), data.hentLegemidler(), data.hentLeger(), data.hentResepter(), "testSkriving");
+
+
+        // Lager ny data objekt og sjekker om innhold er det samme
+        path = System.getProperty("user.dir") + File.separator + "testSkriving.txt";
+        LeseData nyData = new LeseData(path);
+
+        int teller = 0;
+        for (Pasient p1 : data.hentPasienter()) {
+            Pasient p2 = nyData.hentPasienter().hent(teller);
+            if (!p1.hentNavn().equals(p2.hentNavn()) || !p1.hentFnr().equals(p2.hentFnr())) {
+                System.out.println("Navn eller fodselsnummer er feil");
+                System.out.printf("%s, %s\n", p1.hentNavn(), p1.hentFnr());
+                System.out.printf("%s, %s\n", p2.hentNavn(), p2.hentFnr());
+                return;
+            }
+            teller++;
+        }
+
+        for (Legemiddel l : nyData.hentLegemidler()) {
+            System.out.println(l);
+        }
+
+        teller = 0;
+        for (Legemiddel lm1 : data.hentLegemidler()) {
+            Legemiddel lm2 = nyData.hentLegemidler().hent(teller);
+            if (lm1.hentId() != lm2.hentId()
+                || lm1.hentPris() != lm2.hentPris()
+                || !lm1.hentNavn().equals(lm2.hentNavn())
+                || lm1.hentVirkestoff() != lm2.hentVirkestoff()) {
+                System.out.println("Id, navn pris eller virkestoff er feil");
+                System.out.println(lm1);
+                System.out.println(lm2);
+                return;
+            }
+            if (lm1 instanceof Vanlig) {
+                if (!(lm2 instanceof Vanlig)) {
+                    return;
+                } else if (lm1 instanceof Narkotisk) {
+                    if (!(lm2 instanceof Narkotisk)
+                        || ((Narkotisk) lm1).hentNarkotiskStyrke() != ((Narkotisk) lm2).hentNarkotiskStyrke()) {
+                        System.out.println("Type matcher ikke");
+                        System.out.println(lm1);
+                        System.out.println(lm2);
+                        return;
+                    }
+                } else if (lm1 instanceof Vanedannende) {
+                    if (!(lm2 instanceof Vanedannende)
+                        || ((Vanedannende) lm1).hentVanedannendeStyrke() != ((Vanedannende) lm2).hentVanedannendeStyrke()) {
+                        System.out.println("Type matcher ikke");
+                        System.out.println(lm1);
+                        System.out.println(lm2);
+                        return;
+                    }
+                }
+            }
+            teller++;
+        }
+
+        for (Lege l1 : data.hentLeger()) {
+            for (Lege l2 : nyData.hentLeger()) {
+                if (l1.hentLegeNavn().equals(l2.hentLegeNavn())) {
+                    if (l1 instanceof Spesialist) {
+                        if (l2 instanceof Spesialist) {
+                            if (((Spesialist) l1).hentKontrollID() == ((Spesialist) l2).hentKontrollID()) {
+                                break;
+                            }
+                        } else {
+                            System.out.println(l1);
+                            System.out.println(l2);
+                            return;
+                        }
+                    } else {
+                        break;
+                    }
+                }
+                System.out.println("Navn er ikke like");
+                System.out.println(l1);
+                System.out.println(l2);
+                return;
+            }
+        }
+
+        teller = 0;
+        for (Resept r1 : data.hentResepter()) {
+            Resept r2 = nyData.hentResepter().hent(teller);
+            if (r1.hentId() != r2.hentId()
+                || r1.hentLegemiddel().hentId() != r2.hentLegemiddel().hentId()
+                || r1.hentReit() != r2.hentReit()
+                || r1.hentPasientId() != r2.hentPasientId()
+                || !r1.hentLege().hentLegeNavn().equals(r2.hentLege().hentLegeNavn())) {
+                System.out.println(r1);
+                System.out.println(r2);
+                return;
+            }
+        }
+
         antallOK++;
     }
 }
