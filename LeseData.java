@@ -6,7 +6,7 @@ import java.util.Scanner;
 import java.util.Arrays;
 
 class LeseData {
-	// oppretter en lenkelister for de forskjellige objektene
+	// Oppretter en lenkelister for de forskjellige objektene
 	private Liste<Pasient> pasienter;
 	private Liste<Legemiddel> legemidler;
 	private Liste<Lege> leger;
@@ -34,154 +34,34 @@ class LeseData {
 		File file = new File(filepath);
 		Scanner scan = new Scanner(file);
 
-		// sjekker foerste type data og setter peker til neste linje
+		// Sjekker foerste type data og setter peker til neste linje
 		scan.next();
 		String typeData = scan.next();
 		scan.nextLine();
-		// kjoerer while loop til vi har lest igjennom hele filen
+		// Kjoerer while loop til vi har lest igjennom hele filen
 		while (scan.hasNext()) {
-			// leser neste linje og legger den til en array
+			// Leser neste linje og legger den til en array
 			String[] data = scan.nextLine().trim().split(",");
 
 			switch(typeData) {
 				case "Pasienter": {
-					// soerger for at vi har riktig mengde med argumenter. Ignorerer ugyldige objekter
-					if (data.length != 2) {
-						break;
-					}
-
-					String pasientNavn = data[0];
-					String fodselsnummer = data[1];
-
-					Pasient pasient = new Pasient(pasientNavn, fodselsnummer);
-					pasienter.leggTil(pasient);
+					parsePasienter(data);
 					break;
 				}
 				case "Legemidler": {
-					String legemiddelNavn = data[0];
-					String type = data[1];
-					// sjekker for ugyldig type og lengde i henhold til hvilken type
-					if (!(type.equals("narkotisk") || type.equals("vanedannende") || type.equals("vanlig"))
-						|| (type.equals("vanlig") && data.length != 4)
-						|| ((type.equals("narkotisk") || type.equals("vanedannende")) && data.length != 5)) {
-						break;
-					}
-
-					double pris;
-					double virkestoff;
-					int styrke = 0;
-					// tester for ugyldig data
-					try {
-						pris = Double.parseDouble(data[2]);
-						virkestoff = Double.parseDouble(data[3]);
-						if (data.length == 5) {
-							styrke = Integer.parseInt(data[4]);
-						}
-					} catch (NumberFormatException nfe) {
-						break;
-					}
-
-					Legemiddel legemiddel = null;
-					switch(type) {
-						case "narkotisk":
-							legemiddel = new Narkotisk(legemiddelNavn, pris, virkestoff, styrke);
-							break;
-						case "vanedannende":
-							legemiddel = new Vanedannende(legemiddelNavn, pris, virkestoff, styrke);
-							break;
-						case "vanlig":
-							legemiddel = new Vanlig(legemiddelNavn, pris, virkestoff);
-					}
-					legemidler.leggTil(legemiddel);
+					parseLegemidler(data);
 					break;
 				}
 				case "Leger": {
-					//soerger for at vi har riktig mengde med argumenter
-					if (data.length != 2) {
-						break;
-					}
-
-					String legeNavn = data[0];
-					int kontrollId;
-					// tester for ugylidg data
-					try {
-						kontrollId = Integer.parseInt(data[1]);
-					} catch (NumberFormatException nfe) {
-						break;
-					}
-
-					Lege lege;
-					if (kontrollId != 0) {
-						lege = new Spesialist(legeNavn, kontrollId);
-					} else {
-						lege = new Lege(legeNavn);
-					}
-					leger.leggTil(lege);
+					parseLeger(data);
 					break;
 				}
 				case "Resepter": {
-					String typeResept = data[3];
-					String legeNavn = data[1];
-					if ((data.length != 5)
-						|| !(typeResept.equals("hvit") || typeResept.equals("blaa") || typeResept.equals("millitaer"))) {
-						break;
-					}
-
-					int legemiddelNr;
-					int pasientId;
-					int reit;
-					try {
-						legemiddelNr = Integer.parseInt(data[0]);
-						pasientId = Integer.parseInt(data[2]);
-						reit = Integer.parseInt(data[4]);
-					} catch (NumberFormatException nfe) {
-						break;
-					}
-
-					// sjekker om gitt legemiddel eller pasient eksisterer
-					if ((legemiddelNr > legemidler.stoerrelse())
-						|| (pasientId > pasienter.stoerrelse())
-						|| (legemiddelNr < 0)
-						|| (pasientId < 0)) {
-						break;
-					}
-					Legemiddel legemiddel = legemidler.hent(legemiddelNr);
-					Pasient pasient = pasienter.hent(pasientId);
-					Resept resept = null;
-					// iterer over leger listen og finner fram til riktig lege. Hvis navnet ikke finnes skjer ingenting
-					for (Lege lege : leger) {
-						if (lege.hentLegeNavn().equals(legeNavn)) {
-							try {
-								switch(typeResept) {
-									case "hvit":
-										resept = lege.skrivHvitResept(legemiddel, pasient, reit);
-										break;
-									case "blaa":
-										resept = lege.skrivBlaaResept(legemiddel, pasient, reit);
-										break;
-									case "millitaer":
-										resept = lege.skrivMilitaerResept(legemiddel, pasient, reit);
-										break;
-
-								}
-							} catch (UlovligUtskrift uu) {
-								// melding brukes til debugging, la staa kommentert
-								/*
-								for (String d : data) {
-									System.out.print(d + ",");
-								}
-								System.out.println("");
-								*/
-								break;
-							}
-							resepter.leggTil(resept);
-							break;
-						}
-					}
+					parseResepter(data);
 					break;
 				}
 			}
-			// sjekker om neste linje er ny type objekt
+			// Sjekker om neste linje er ny type objekt
 			if (scan.hasNext("#")) {
 				scan.next();
 				typeData = scan.next();
@@ -191,7 +71,157 @@ class LeseData {
 		scan.close();
 	}
 
-	//for testing
+	private void parsePasienter(String[] data) {
+		// Soerger for at vi har riktig mengde med argumenter. Ignorerer ugyldige objekter
+		if (data.length != 2) {
+			return;
+		}
+
+		String pasientNavn = data[0];
+		String fodselsnummer = data[1];
+
+		Pasient pasient = new Pasient(pasientNavn, fodselsnummer);
+		pasienter.leggTil(pasient);
+	}
+
+	private void parseLegemidler(String[] data) {
+		if (data.length != 4 && data.length != 5) {
+			return;
+		}
+		String legemiddelNavn = data[0];
+		String type = data[1];
+		// Sjekker for ugyldig type og lengde i henhold til hvilken type
+		if (!(type.equals("narkotisk") || type.equals("vanedannende") || type.equals("vanlig"))
+			|| (type.equals("vanlig") && data.length != 4)
+			|| ((type.equals("narkotisk") || type.equals("vanedannende")) && data.length != 5)) {
+			return;
+		}
+
+		double pris;
+		double virkestoff;
+		int styrke = 0;
+		// Tester for ugyldig data
+		try {
+			pris = Double.parseDouble(data[2]);
+			virkestoff = Double.parseDouble(data[3]);
+			if (data.length == 5) {
+				styrke = Integer.parseInt(data[4]);
+			}
+		} catch (NumberFormatException nfe) {
+			return;
+		}
+
+		Legemiddel legemiddel = null;
+		switch(type) {
+			case "narkotisk":
+				legemiddel = new Narkotisk(legemiddelNavn, pris, virkestoff, styrke);
+				break;
+			case "vanedannende":
+				legemiddel = new Vanedannende(legemiddelNavn, pris, virkestoff, styrke);
+				break;
+			case "vanlig":
+				legemiddel = new Vanlig(legemiddelNavn, pris, virkestoff);
+				break;
+		}
+		legemidler.leggTil(legemiddel);
+
+	}
+
+	private void parseLeger(String[] data) {
+		// Soerger for at vi har riktig mengde med argumenter
+		if (data.length != 2) {
+			return;
+		}
+
+		String legeNavn = data[0];
+		int kontrollId;
+		// Tester for ugylidg data
+		try {
+			kontrollId = Integer.parseInt(data[1]);
+		} catch (NumberFormatException nfe) {
+			return;
+		}
+
+		Lege lege;
+		if (kontrollId != 0) {
+			lege = new Spesialist(legeNavn, kontrollId);
+		} else {
+			lege = new Lege(legeNavn);
+		}
+		leger.leggTil(lege);
+	}
+
+	private void parseResepter(String[] data) {
+		if (data.length != 4 && data.length != 5) {
+			return;
+		}
+		String typeResept = data[3];
+		String legeNavn = data[1];
+		if (!(typeResept.equals("hvit") || typeResept.equals("blaa") || typeResept.equals("millitaer") || typeResept.equals("p"))
+			|| (typeResept.equals("p") && data.length != 4)
+			|| (!typeResept.equals("p") && data.length != 5)) {
+			return;
+		}
+
+		int legemiddelNr;
+		int pasientId;
+		int reit = 0;
+		try {
+			legemiddelNr = Integer.parseInt(data[0]);
+			pasientId = Integer.parseInt(data[2]);
+			if (data.length == 5) {
+				reit = Integer.parseInt(data[4]);
+			}
+		} catch (NumberFormatException nfe) {
+			return;
+		}
+
+		// Sjekker om gitt legemiddel eller pasient eksisterer
+		if ((legemiddelNr > legemidler.stoerrelse())
+			|| (pasientId > pasienter.stoerrelse())
+			|| (legemiddelNr < 0)
+			|| (pasientId < 0)) {
+			return;
+		}
+		Legemiddel legemiddel = legemidler.hent(legemiddelNr);
+		Pasient pasient = pasienter.hent(pasientId);
+		Resept resept = null;
+		// Iterer over leger listen og finner fram til riktig lege. Hvis navnet ikke finnes skjer ingenting
+		for (Lege lege : leger) {
+			if (lege.hentLegeNavn().equals(legeNavn)) {
+				try {
+					switch(typeResept) {
+						case "hvit":
+							resept = lege.skrivHvitResept(legemiddel, pasient, reit);
+							break;
+						case "blaa":
+							resept = lege.skrivBlaaResept(legemiddel, pasient, reit);
+							break;
+						case "millitaer":
+							resept = lege.skrivMilitaerResept(legemiddel, pasient, reit);
+							break;
+						case "p":
+							resept = lege.skrivPResept(legemiddel, pasient);
+							break;
+
+					}
+				} catch (UlovligUtskrift uu) {
+					// melding brukes til debugging, la staa kommentert
+					/*
+					for (String d : data) {
+						System.out.print(d + ",");
+					}
+					System.out.println("");
+					*/
+					return;
+				}
+				resepter.leggTil(resept);
+				return;
+			}
+		}
+	}
+
+	// For testing
 	/*
 	public static void main(String[] args) throws FileNotFoundException {
 		String path = System.getProperty("user.dir") + File.separator + "myeInndata.txt";
