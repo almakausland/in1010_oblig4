@@ -69,6 +69,7 @@ class SkriveTilFil {
 		output.print("\n# Leger (navn,kontrollid / 0 hvis vanlig lege)");
 		String lege = null;
 		int kontrollId = 0;
+
 		for (Lege l : leger) {
 			if (l instanceof Spesialist) {
 				kontrollId = ((Spesialist) l).hentKontrollID();
@@ -84,6 +85,7 @@ class SkriveTilFil {
 		output.print("\n# Resepter (legemiddelNummer,legeNavn,pasientID,type,[reit])");
 		String resept = null;
 
+		// PResept og MillitaerResept arver fra HvitResept og maa dermed sjekkes foer HvitResept
 		for (Resept r : resepter) {
 			if (r instanceof PResept) {
 				resept = String.format("\n%d,%s,%d,p",
@@ -107,15 +109,6 @@ class SkriveTilFil {
 					r.hentReit());
 			}
 			output.print(resept);
-		}
-	}
-
-	public static void main(String[] args) throws FileNotFoundException, IOException {
-		String path = System.getProperty("user.dir") + File.separator + "inndata.txt";
-		LeseData data = new LeseData(path);
-		SkriveTilFil stf = new SkriveTilFil(data.hentPasienter(), data.hentLegemidler(), data.hentLeger(), data.hentResepter(), "output");
-		for (Resept r : data.hentResepter()) {
-			System.out.println(r);
 		}
 	}
 }
