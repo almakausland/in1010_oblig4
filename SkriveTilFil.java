@@ -1,3 +1,5 @@
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.PrintWriter;
 import java.io.IOException;
@@ -10,7 +12,7 @@ class SkriveTilFil {
 		Liste<Lege> leger,
 		Liste<Resept> resepter,
 		String filnavn) throws IOException{
-		FileWriter fw = new FileWriter(String.format("%s.txt", filnavn), true);
+		FileWriter fw = new FileWriter(String.format("%s.txt", filnavn), false);
 		PrintWriter output = new PrintWriter(fw);
 
 		pasienterTilFil(pasienter, output);
@@ -23,22 +25,22 @@ class SkriveTilFil {
 	}
 
 	private void pasienterTilFil(Liste<Pasient> pasienter, PrintWriter output) {
-		output.println("# Pasienter (navn, fnr)");
+		output.print("# Pasienter (navn, fnr)");
 		String pasient = null;
 
 		for (Pasient p : pasienter) {
-			pasient = String.format("%s,%s", p.hentNavn(), p.hentFnr());
-			output.println(pasient);
+			pasient = String.format("\n%s,%s", p.hentNavn(), p.hentFnr());
+			output.print(pasient);
 		}
 	}
 
 	private void legemidlerTilFil(Liste<Legemiddel> legemidler, PrintWriter output) {
-		output.println("# Legemidler (navn,type,pris,virkestoff,[styrke]");
+		output.print("\n# Legemidler (navn,type,pris,virkestoff,[styrke]");
 		String legemiddel = null;
 
 		for (Legemiddel lm : legemidler) {
 			if (lm instanceof Vanlig) {
-				legemiddel = String.format("%s,vanlig,%s,%s",
+				legemiddel = String.format("\n%s,vanlig,%s,%s",
 					lm.hentNavn(),
 					String.valueOf(lm.hentPris()),
 					String.valueOf(lm.hentVirkestoff()));
@@ -52,57 +54,68 @@ class SkriveTilFil {
 					type = "vanedannende";
 					styrke = ((Vanedannende) lm).hentVanedannendeStyrke();
 				}
-				legemiddel = String.format("%s,%s,%s,%s,%d",
+				legemiddel = String.format("\n%s,%s,%s,%s,%d",
 					lm.hentNavn(),
 					type,
 					String.valueOf(lm.hentPris()),
 					String.valueOf(lm.hentVirkestoff()),
 					styrke);
 			}
-			output.println(legemiddel);
+			output.print(legemiddel);
 		}
 	}
 
 	private void legerTilFil(Liste<Lege> leger, PrintWriter output) {
-		output.println("# Leger (navn,kontrollid / 0 hvis vanlig lege)");
+		output.print("\n# Leger (navn,kontrollid / 0 hvis vanlig lege)");
 		String lege = null;
 		int kontrollId = 0;
 		for (Lege l : leger) {
 			if (l instanceof Spesialist) {
 				kontrollId = ((Spesialist) l).hentKontrollID();
+			} else {
+				kontrollId = 0;
 			}
-			lege = String.format("%s,%d", l.hentLegeNavn(), kontrollId);
+			lege = String.format("\n%s,%d", l.hentLegeNavn(), kontrollId);
+			output.print(lege);
 		}
-		output.println(lege);
 	}
 
 	private void resepterTilFil(Liste<Resept> resepter, PrintWriter output) {
-		output.println("# Resepter (legemiddelNummer,legeNavn,pasientID,type,[reit]");
+		output.print("\n# Resepter (legemiddelNummer,legeNavn,pasientID,type,[reit])");
 		String resept = null;
 
 		for (Resept r : resepter) {
 			if (r instanceof PResept) {
-				resept = String.format("%d,%s,%d,p",
+				resept = String.format("\n%d,%s,%d,p",
 					r.hentLegemiddel().hentId(),
 					r.hentLege().hentLegeNavn(),
 					r.hentPasientId());
 			} else {
 				String type;
-				if (r instanceof HvitResept) {
-					type = "hvit";
-				} else if (r instanceof MillitaerResept) {
+				if (r instanceof MillitaerResept) {
 					type = "millitaer";
+				} else if (r instanceof HvitResept) {
+					type = "hvit";
 				} else {
 					type = "blaa";
 				}
-				resept = String.format("%d,%s,%d,%s,%d",
+				resept = String.format("\n%d,%s,%d,%s,%d",
 					r.hentLegemiddel().hentId(),
 					r.hentLege().hentLegeNavn(),
 					r.hentPasientId(),
 					type,
 					r.hentReit());
 			}
+			output.print(resept);
 		}
-		output.println(resept);
+	}
+
+	public static void main(String[] args) throws FileNotFoundException, IOException {
+		String path = System.getProperty("user.dir") + File.separator + "inndata.txt";
+		LeseData data = new LeseData(path);
+		SkriveTilFil stf = new SkriveTilFil(data.hentPasienter(), data.hentLegemidler(), data.hentLeger(), data.hentResepter(), "output");
+		for (Resept r : data.hentResepter()) {
+			System.out.println(r);
+		}
 	}
 }
