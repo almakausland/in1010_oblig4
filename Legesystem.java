@@ -1,7 +1,10 @@
+import java.io.FileNotFoundException;
+
 public class Legesystem {
-    Lenkeliste<Lege> legeListe;
-    Lenkeliste<Pasient> pasientListe;
-    Lenkeliste<Resept> reseptListe;
+
+    Liste<Lege> legeListe;
+    Liste<Pasient> pasientListe;
+    Liste<Resept> reseptListe;
 
     Legesystem (){
 
@@ -32,4 +35,67 @@ public class Legesystem {
         }
     }
 
+    //E6 deloppgave 1
+    public void statVane(){
+        int res = 0;
+
+        System.out.print("Total utskrevne vanedannende resepter: ");
+
+        for (Resept resept: reseptListe){
+            if (resept.legemiddel instanceof Vanedannende){
+                res ++;
+            }
+        }
+        System.out.println(res);
+    }
+
+    //E6 deloppgave 2
+    public void statNark(){
+        int res = 0;
+
+        System.out.print("Total utskrevne narkotiske resepter: ");
+
+        for (Resept resept: reseptListe){
+            if (resept.legemiddel instanceof Narkotisk){
+                res ++;
+            }
+        }
+
+        System.out.println(res);
+    }
+
+    //E6 deloppgave 3
+    public void statMisbrukLege(){
+
+        System.out.println("Leger som har skrevet ut minst en narkotisk resept: ");
+
+        for (Lege lege: legeListe){
+            int res = 0;
+            for (Resept resept: lege.utskrevedeResepter) {
+                if (resept.legemiddel instanceof Narkotisk) {
+                    res++;
+                }
+            }
+            if (res > 0) {
+                System.out.println(" - Legenavn: " + lege.hentLegeNavn() + ", antall resepter: " + res);
+            }
+        }
+    }
+
+    //E6 deloppgave 3
+    public void statMisbrukPasient(){
+        System.out.println("Pasienter som har minst en narkotisk resept: ");
+
+        for (Pasient pasient: pasientListe){
+            int res = 0;
+            for (Resept resept: pasient.hentResepter()) {
+                if (resept.legemiddel instanceof Narkotisk) {
+                    res++;
+                }
+            }
+            if (res > 0) {
+                System.out.println(" - Pasientnavn: " + pasient.hentNavn() + ", antall resepter: " + res);
+            }
+        }
+    }
 }
