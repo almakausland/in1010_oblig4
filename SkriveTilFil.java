@@ -23,7 +23,7 @@ class SkriveTilFil {
 
 	private void pasienterTilFil(Liste<Pasient> pasienter, PrintWriter output) {
 		output.println("# Pasienter (navn, fnr)");
-		String pasient;
+		String pasient = null;
 
 		for (Pasient p : pasienter) {
 			pasient = String.format("%s,%s", p.hentNavn(), p.hentFnr());
@@ -33,15 +33,30 @@ class SkriveTilFil {
 
 	private void legemidlerTilFil(Liste<Legemiddel> legemidler, PrintWriter output) {
 		output.println("# Legemidler (navn,type,pris,virkestoff,[styrke]");
-		String legemiddel;
+		String legemiddel = null;
 
 		for (Legemiddel lm : legemidler) {
 			if (lm instanceof Vanlig) {
-				legemiddel = String.format("%s,vanlig,%s,%s", lm.hentNavn(), String.valueOf(lm.hentPris()), String.valueOf(lm.hentVirkestoff()));
-			} else if (lm instanceof Narkotisk) {
-				legemiddel = String.format("%s,narkotisk,%s,%s,%d", lm.hentNavn(), String.valueOf(lm.hentPris()), String.valueOf(lm.hentVirkestoff()), lm.hentNarkotiskStyrke());
+				legemiddel = String.format("%s,vanlig,%s,%s",
+					lm.hentNavn(),
+					String.valueOf(lm.hentPris()),
+					String.valueOf(lm.hentVirkestoff()));
 			} else {
-				legemiddel = String.format("%s,vanedannende,%s,%s,%d", lm.hentNavn(), String.valueOf(lm.hentPris()), String.valueOf(lm.hentVirkestoff()), lm.hentVanedannendeStyrke());
+				String type;
+				int styrke = 0;
+				if (lm instanceof Narkotisk) {
+					type = "narkotisk";
+					styrke = ((Narkotisk) lm).hentNarkotiskStyrke();
+				} else {
+					type = "vanedannende";
+					styrke = ((Vanedannende) lm).hentVanedannendeStyrke();
+				}
+				legemiddel = String.format("%s,%s,%s,%s,%d",
+					lm.hentNavn(),
+					type,
+					String.valueOf(lm.hentPris()),
+					String.valueOf(lm.hentVirkestoff()),
+					styrke);
 			}
 			output.println(legemiddel);
 		}
@@ -53,5 +68,31 @@ class SkriveTilFil {
 
 	private void resepterTilFil(Liste<Resept> resepter, PrintWriter output) {
 		output.println("# Resepter (legemiddelNummer,legeNavn,pasientID,type,[reit]");
+		String resept = null;
+
+		for (Resept r : resepter) {
+			if (r instanceof PResept) {
+				resept = String.format("%d,%s,%d,p",
+					r.hentLegemiddel().hentId(),
+					r.hentLege().hentLegeNavn(),
+					r.hentPasientId());
+			} else {
+				String type;
+				if (r instanceof HvitResept) {
+					type = "hvit";
+				} else if (r instanceof MillitaerResept) {
+					type = "millitaer";
+				} else {
+					type = "blaa";
+				}
+				resept = String.format("%d,%s,%d,%s,%d",
+					r.hentLegemiddel().hentId(),
+					r.hentLege().hentLegeNavn(),
+					r.hentPasientId(),
+					type,
+					r.hentReit());
+			}
+		}
+		output.println(resept);
 	}
 }
