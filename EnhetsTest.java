@@ -1,3 +1,5 @@
+import java.io.FileNotFoundException;
+
 class EnhetsTest {
     private static int antallTester;
     private static int antallOK;
@@ -8,11 +10,13 @@ class EnhetsTest {
     }
 
     public static void main(String[] args) {
-        C_lenkelisteIterator();
-        D1_legeComparable();
-        D3_legeSkriv();
+        //C_lenkelisteIterator();
+        //D1_legeComparable();
+        //D3_legeSkriv();
         //E2_kommandoLokke();
-        E3_skrivUt();
+        //E3_skrivUt();
+        //E6_statistikkTest();
+
 
         System.out.println("Antall tester utført: " + antallTester);
         System.out.println("Antall tester bestått: " + antallOK);
@@ -166,6 +170,27 @@ class EnhetsTest {
 
 
         sys1.print();
+        antallOK++;
+    }
+
+    private static void E6_statistikkTest(){
+        antallTester++;
+        try {
+            LeseData les = new LeseData ("src/myeinndata.txt");
+
+            Legesystem sys = new Legesystem();
+            sys.legeListe = les.hentLeger();
+            sys.pasientListe = les.hentPasienter();
+            sys.reseptListe = les.hentResepter();
+
+            sys.statVane();
+            sys.statNark();
+            sys.statMisbrukLege();
+            sys.statMisbrukPasient();
+
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
         antallOK++;
     }
 }

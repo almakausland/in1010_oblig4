@@ -28,7 +28,7 @@ class LeseData {
 	public LeseData(String filepath) throws FileNotFoundException {
 		pasienter = new Lenkeliste<Pasient>();
 		legemidler = new Lenkeliste<Legemiddel>();
-		leger = new Lenkeliste<Lege>();
+		leger = new SortertLenkeliste<Lege>();
 		resepter = new Lenkeliste<Resept>();
 
 		File file = new File(filepath);
