@@ -118,11 +118,11 @@ class Kommandolokke {
         String reseptNavn = resept.hentLegemiddel().hentNavn();
         // Sjekker om resepten er brukt opp. Bruker resepten hvis den har gjenstaaende reit
         if (reit <= 0) {
-            System.out.printf("\nKunne ikke bruke resept paa %s (ingen gjenvaerende reit)", reseptNavn);
+            System.out.printf("\nKunne ikke bruke resept paa %s (ingen gjenvaerende reit)\n", reseptNavn);
         } else {
             reit--;
             resept.bruk();
-            System.out.printf("\nBrukte resept paa %s. Antall gjenvaerende reit: %d", reseptNavn, reit);
+            System.out.printf("\nBrukte resept paa %s. Antall gjenvaerende reit: %d\n", reseptNavn, reit);
         }
 
     }
