@@ -9,23 +9,24 @@ class EnhetsTest {
         antallOK = 0;
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws UlovligUtskrift {
         //C_lenkelisteIterator();
         //D1_legeComparable();
         //D3_legeSkriv();
         //E2_kommandoLokke();
         //E3_skrivUt();
         //E6_statistikkTest();
+        //E4_velgElementerTest();
 
 
         System.out.println("Antall tester utført: " + antallTester);
         System.out.println("Antall tester bestått: " + antallOK);
-        
+
     }
 
     private static void C_lenkelisteIterator() {
         antallTester++;
-        
+
         // Lag en ny lenkeliste, legg til noen element og se om lenkelisten kan itereres
         Lenkeliste<String> testLenkeliste = new Lenkeliste<String>();
         testLenkeliste.leggTil("første");
@@ -48,7 +49,7 @@ class EnhetsTest {
         // Lag to Lege elementer og sammenlign navn
         Lege legeEn = new Lege("Dr. Paus");
         Lege legeTo = new Lege("Dr. Ueland");
-        
+
         if (legeEn.compareTo(legeTo) < 0) {
             antallOK++;
             System.out.println("D1 - OK - leger sammenlignes riktig");
@@ -89,7 +90,7 @@ class EnhetsTest {
             } else {
                 System.out.println("D3 - Problem - kunne ikke legge til gyldige resept hos lege");
             }
-            
+
         } catch (UlovligUtskrift u) {
             System.out.println("D3 - Problem - kunne ikke legge til gyldige resept hos lege");
         }
@@ -115,7 +116,7 @@ class EnhetsTest {
         }
     }
 
-    private static void E2_kommandoLokke() {
+    private static void E2_kommandoLokke() throws UlovligUtskrift{
         Legesystem sys1 = new Legesystem();
         new Kommandolokke(sys1);
 
@@ -192,5 +193,10 @@ class EnhetsTest {
             e.printStackTrace();
         }
         antallOK++;
+    }
+
+    private static void E4_velgElementerTest() throws UlovligUtskrift{
+        Legesystem legeSys = new Legesystem();
+        new Kommandolokke(legeSys);
     }
 }

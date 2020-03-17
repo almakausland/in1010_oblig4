@@ -5,12 +5,15 @@ public class Legesystem {
     Liste<Lege> legeListe;
     Liste<Pasient> pasientListe;
     Liste<Resept> reseptListe;
+    Liste<Legemiddel> legemiddelListe;
+
 
     Legesystem (){
 
         legeListe = new SortertLenkeliste();
         pasientListe = new Lenkeliste();
         reseptListe = new Lenkeliste();
+        legemiddelListe = new Lenkeliste();
 
     }
 
