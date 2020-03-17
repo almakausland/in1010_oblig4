@@ -69,6 +69,62 @@ class Kommandolokke {
 
     private void brukResept() {
         // Kall til E5
+        System.out.println("Hvilken pasient vil du se resepter for?");
+        int teller = 0;
+        // Skriver ut listen med pasienter
+        for (Pasient p : legesystem.pasientListe) {
+            System.out.printf("%d: %s (fnr %s)\n", teller, p.hentNavn(), p.hentFnr());
+            teller++;
+        }
+
+        int stoerrelse = legesystem.pasientListe.stoerrelse();
+        int pasientNr = -1;
+        // Sjekker for gyldig input, looper fram til bruker gir gyldig input
+        while (pasientNr < 0 || pasientNr >= stoerrelse) {
+            String valgStreng = terminalInput.next();
+
+            try {
+                int valgTall = Integer.parseInt(valgStreng);
+                pasientNr = valgTall;
+            } catch (NumberFormatException nfe) {
+                System.out.printf("Feil format. Vennligst angi et tall mellom 0 og %d.\n", stoerrelse);
+            }
+        }
+
+        Sytem.out.printf("\nValgt Pasient: %s (fnr %s).\nHvilken resept vil du bruke?", p.hentNavn(), p.hentFnr());
+        Liste<Resept> reseptStabel = legesystem.pasientListe.hent(pasientNr);
+        stoerrelse = reseptStabel.stoerrelse();
+        teller = 0;
+        reseptNr = -1;
+        // Skriver ut listen med resepter tilhoerende pasient
+        for (Resept r : reseptStabel) {
+            System.out.printf("%d: %s (%d reit)\n", teller, r.hentLegemiddel().hentNavn(), r.hentReit());
+            teller++;
+        }
+        // Sjekker for gyldig inpupt
+        while (reseptNr < 0 || reseptNr >= stoerrelse) {
+            String valgStreng = terminalInput.next();
+
+            try {
+                int valgTall = Integer.parseInt(valgStreng);
+                reseptNr = valgTall;
+            } catch (NumberFormatException nfe) {
+                System.out.printf("Feil format. Vennligst angi et tall mellom 0 og %d.\n", stoerrelse);
+            }
+        }
+
+        Resept resept = reseptStabel.hent(reseptNr);
+        int reit = resept.hentReit();
+        String reseptNavn = resept.hentLegemiddel().hentNavn();
+        // Sjekker om resepten er brukt opp. Bruker resepten hvis den har gjenstaaende reit
+        if (reit <= 0) {
+            System.out.printf("\nKunne ikke bruke resept paa %s (ingen gjenvaerende reit)", reseptNavn);
+        } else {
+            reit--;
+            resept.bruk();
+            System.out.printf("\nBrukte resept paa %s. Antall gjenvaerende reit: %d", reseptNavn, reit);
+        }
+
     }
 
     private void skrivStatistikk() {
