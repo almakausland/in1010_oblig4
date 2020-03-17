@@ -33,6 +33,11 @@ abstract class Legemiddel {
         pris = nyPris;
     }
 
+    // Metode brukes til aa teste E8 SkriveTilFil
+    public static void nullstillId() {
+        antall = 0;
+    }
+
     @Override
     public String toString() {
         String tekstRep = String.format(
