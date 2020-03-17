@@ -108,7 +108,7 @@ class Kommandolokke {
         } else if (valg == 3) {
             legesystem.statMisbrukPasient();
         } else if (valg == 4) {
-            visMeny = false;
+            menyValg();
         } else if (valg < 0 || valg > 4) {
             System.out.println("Vennligst velg et av tallene fra menyen. " + valg + " er ikke et gyldig tall.");
         }
