@@ -30,6 +30,11 @@ class Pasient {
         return fodselsnummer;
     }
 
+    // Metode brukes til aa teste E8 SkriveTilFil
+    public static void nullstillId() {
+        antall = 0;
+    }
+
     @Override
     public String toString() {
         String reseptTekst = "";

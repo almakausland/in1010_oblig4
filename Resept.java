@@ -45,6 +45,11 @@ abstract class Resept {
         }
     }
 
+    // Metoden brukes til aa teste E8 SkriveTilFil
+    public static void nullstillId() {
+        antall = 0;
+    }
+
     abstract public String farge();
 
     abstract public double prisAaBetale();

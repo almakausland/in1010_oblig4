@@ -16,6 +16,14 @@ class EnhetsTest {
         //C_lenkelisteIterator();
         //D1_legeComparable();
         //D3_legeSkriv();
+        // E1 testes visuelt, skriver ut alle verdier
+        /*
+        try {
+            E1_leseData();
+        } catch (FileNotFoundException e) {
+            System.out.printf("Feil: %s", e);
+        }
+        */
         //E2_kommandoLokke();
         //E3_skrivUt();
         //E6_statistikkTest();
@@ -125,6 +133,28 @@ class EnhetsTest {
             System.out.println("D3 - Problem - kaster unntak om spesialist skriver narkotisk");
         }
     }
+    private static void E1_leseData() throws FileNotFoundException {
+        antallTester++;
+        String path = System.getProperty("user.dir") + File.separator + "myeInndata.txt";
+        LeseData data = new LeseData(path);
+
+        for (Pasient p : data.hentPasienter()) {
+            System.out.printf("Navn: %s\nFnr: %s\n\n", p.hentNavn(), p.hentFnr());
+        }
+        
+        for (Legemiddel l : data.hentLegemidler()) {
+            System.out.println(l);
+        }
+
+        for (Lege l : data.hentLeger()) {
+            System.out.println(l);
+        }
+
+        for (Resept r : data.hentResepter()) {
+            System.out.println(r);
+        }
+        antallOK++;
+    }
 
     private static void E2_kommandoLokke() {
         Legesystem sys1 = new Legesystem();
@@ -213,7 +243,10 @@ class EnhetsTest {
         LeseData data = new LeseData(path);
         SkriveTilFil stf = new SkriveTilFil(data.hentPasienter(), data.hentLegemidler(), data.hentLeger(), data.hentResepter(), "testSkriving");
 
-
+        // Foer vi kan opprette et nytt data objekt maa vi nullstille statiske variabler
+        Resept.nullstillId();
+        Legemiddel.nullstillId();
+        Pasient.nullstillId();
         // Lager ny data objekt og sjekker om innhold er det samme
         path = System.getProperty("user.dir") + File.separator + "testSkriving.txt";
         LeseData nyData = new LeseData(path);
@@ -228,10 +261,6 @@ class EnhetsTest {
                 return;
             }
             teller++;
-        }
-
-        for (Legemiddel l : nyData.hentLegemidler()) {
-            System.out.println(l);
         }
 
         teller = 0;
@@ -270,9 +299,13 @@ class EnhetsTest {
             teller++;
         }
 
+        if (data.hentLeger().stoerrelse() != nyData.hentLeger().stoerrelse()) {
+            return;
+        }
+        teller = 0;
         for (Lege l1 : data.hentLeger()) {
             for (Lege l2 : nyData.hentLeger()) {
-                if (l1.hentLegeNavn().equals(l2.hentLegeNavn())) {
+                if (l1.hentLegeNavn().trim().equals(l2.hentLegeNavn().trim())) {
                     if (l1 instanceof Spesialist) {
                         if (l2 instanceof Spesialist) {
                             if (((Spesialist) l1).hentKontrollID() == ((Spesialist) l2).hentKontrollID()) {
@@ -287,9 +320,11 @@ class EnhetsTest {
                         break;
                     }
                 }
-                System.out.println("Navn er ikke like");
+                teller++;
+            }
+            if (teller == data.hentLeger().stoerrelse()) {
+                System.out.println("Mangler lege");
                 System.out.println(l1);
-                System.out.println(l2);
                 return;
             }
         }
@@ -305,7 +340,24 @@ class EnhetsTest {
                 System.out.println(r1);
                 System.out.println(r2);
                 return;
+            } else if (r1 instanceof PResept) {
+                if (!(r2 instanceof PResept)) {
+                    return;
+                }
+            } else if (r1 instanceof MillitaerResept) {
+                if (!(r2 instanceof MillitaerResept)) {
+                    return;
+                }
+            } else if (r1 instanceof BlaaResept) {
+                if (!(r2 instanceof BlaaResept)) {
+                    return;
+                }
+            } else if (r1 instanceof HvitResept) {
+                if (!(r2 instanceof HvitResept)) {
+                    return;
+                }
             }
+            teller++;
         }
 
         antallOK++;

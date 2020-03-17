@@ -220,28 +220,4 @@ class LeseData {
 			}
 		}
 	}
-
-	// For testing
-	/*
-	public static void main(String[] args) throws FileNotFoundException {
-		String path = System.getProperty("user.dir") + File.separator + "myeInndata.txt";
-		LeseData data = new LeseData(path);
-
-		for (Pasient p : data.hentPasienter()) {
-			System.out.printf("Navn: %s\nFnr: %s\n\n", p.hentNavn(), p.hentFnr());
-		}
-		
-		for (Legemiddel l : data.hentLegemidler()) {
-			System.out.println(l);
-		}
-
-		for (Lege l : data.hentLeger()) {
-			System.out.println(l);
-		}
-
-		for (Resept r : data.hentResepter()) {
-			System.out.println(r);
-		}
-	}
-	*/
 }
